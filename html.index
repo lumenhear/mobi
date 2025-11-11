@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge & Referral</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #16a34a;
+        }
+        
+        /* Referral Section */
+        .referral-box {
+            background: linear-gradient(135deg, #dbeafe, #e0f2fe);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .referral-code {
+            display: flex;
+            margin: 1rem 0;
+        }
+        
+        .referral-code input {
+            flex: 1;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            padding: 0 1rem;
+            cursor: pointer;
+        }
+        
+        /* Network Tree */
+        .tree-container {
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+        
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 800px;
+        }
+        
+        .tree-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+        
+        .user-node {
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .current-user {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .tree-connector {
+            height: 40px;
+            width: 2px;
+            background: var(--primary);
+            margin: 0 auto;
+        }
+        
+        .tree-branch {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+        
+        /* Commission History */
+        .commission-list {
+            list-style: none;
+        }
+        
+        .commission-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .commission-item:last-child {
+            border-bottom: none;
+        }
+        
+        .commission-amount {
+            font-weight: bold;
+            color: var(--success);
+        }
+        
+        /* Alert Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-info {
+            background: #dbeafe;
+            color: var(--primary-dark);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid var(--warning);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span>⚡</span>
+                    <span>Recharge & Refer</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active" data-page="dashboard">Dashboard</a>
+                    <a href="#" class="nav-link" data-page="recharge">Recharge</a>
+                    <a href="#" class="nav-link" data-page="network">My Network</a>
+                    <a href="#" class="nav-link" data-page="commission">Commissions</a>
+                </div>
+                <div class="user-info">
+                    <span id="user-mobile">9876543210</span>
+                    <button class="btn" id="logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page active">
+            <h1>Dashboard</h1>
+            <p class="subtitle">Welcome back! Here's your referral network summary.</p>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="left-count">5</div>
+                    <div class="stat-label">Left Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="right-count">3</div>
+                    <div class="stat-label">Right Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">₹<span id="wallet-balance">42.50</span></div>
+                    <div class="stat-label">Wallet Balance</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value">₹<span id="total-earnings">87.50</span></div>
+                    <div class="stat-label">Total Earnings</div>
+                </div>
+            </div>
+            
+            <!-- Referral Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Your Referral Code</h2>
+                </div>
+                <div class="referral-box">
+                    <p>Share your referral code with friends and earn commissions when they recharge!</p>
+                    <div class="referral-code">
+                        <input type="text" id="referral-code" value="REF7X9A2B" readonly>
+                        <button class="copy-btn" id="copy-ref-code">Copy</button>
+                    </div>
+                    <div class="alert alert-warning">
+                        <strong>Note:</strong> Referral rewards are earned only from valid recharges. No guaranteed income statements.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Quick Actions</h2>
+                </div>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn" data-page="recharge">Make a Recharge</button>
+                    <button class="btn" data-page="network">View Network</button>
+                    <button class="btn" data-page="commission">Commission History</button>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Activity</h2>
+                </div>
+                <ul class="commission-list">
+                    <li class="commission-item">
+                        <div>
+                            <div>Direct referral recharge</div>
+                            <div class="text-muted">2 hours ago</div>
+                        </div>
+                        <div class="commission-amount">+₹1.00</div>
+                    </li>
+                    <li class="commission-item">
+                        <div>
+                            <div>Level 2 recharge</div>
+                            <div class="text-muted">1 day ago</div>
+                        </div>
+                        <div class="commission-amount">+₹0.50</div>
+                    </li>
+                    <li class="commission-item">
+                        <div>
+                            <div>Recharge completed</div>
+                            <div class="text-muted">2 days ago</div>
+                        </div>
+                        <div class="commission-amount">-₹5.00</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Recharge Page -->
+        <div id="recharge" class="page">
+            <h1>Mobile Recharge</h1>
+            <p class="subtitle">Recharge for ₹5 and earn through referrals</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recharge Details</h2>
+                </div>
+                <form id="recharge-form">
+                    <div class="form-group">
+                        <label for="mobile-number">Mobile Number</label>
+                        <input type="tel" id="mobile-number" placeholder="Enter 10-digit mobile number" required pattern="[0-9]{10}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="operator">Operator</label>
+                        <select id="operator" required>
+                            <option value="">Select Operator</option>
+                            <option value="Airtel">Airtel</option>
+                            <option value="Jio">Jio</option>
+                            <option value="Vi">Vi</option>
+                            <option value="BSNL">BSNL</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="circle">Circle</label>
+                        <select id="circle" required>
+                            <option value="">Select Circle</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Kolkata">Kolkata</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Bangalore">Bangalore</option>
+                        </select>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <strong>Commission Info:</strong><br>
+                        • Direct referral: ₹1.00<br>
+                        • Level 2: ₹0.50<br>
+                        • Your upline earns when you recharge!
+                    </div>
+                    
+                    <button type="submit" class="btn btn-block">Pay ₹5 & Recharge</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Recharges</h2>
+                </div>
+                <ul class="commission-list">
+                    <li class="commission-item">
+                        <div>
+                            <div>9876543210 (Airtel - Delhi)</div>
+                            <div class="text-muted">2 days ago</div>
+                        </div>
+                        <div>₹5.00</div>
+                    </li>
+                    <li class="commission-item">
+                        <div>
+                            <div>8765432109 (Jio - Mumbai)</div>
+                            <div class="text-muted">5 days ago</div>
+                        </div>
+                        <div>₹5.00</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Network Page -->
+        <div id="network" class="page">
+            <h1>My Network</h1>
+            <p class="subtitle">View your binary referral structure</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Network Summary</h2>
+                </div>
+                <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="stat-card">
+                        <div class="stat-value" id="network-left">5</div>
+                        <div class="stat-label">Left Team</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="network-right">3</div>
+                        <div class="stat-label">Right Team</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="network-total">8</div>
+                        <div class="stat-label">Total Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="network-active">6</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Network Tree</h2>
+                </div>
+                <div class="tree-container">
+                    <div class="tree">
+                        <!-- Level 1 (You) -->
+                        <div class="tree-level">
+                            <div class="tree-node">
+                                <div class="user-node current-user">You</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tree-connector"></div>
+                        
+                        <!-- Level 2 -->
+                        <div class="tree-level">
+                            <div class="tree-branch">
+                                <div class="tree-node">
+                                    <div class="user-node">User1</div>
+                                    <div class="tree-connector"></div>
+                                </div>
+                                <div class="tree-node">
+                                    <div class="user-node">User2</div>
+                                    <div class="tree-connector"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Level 3 -->
+                        <div class="tree-level">
+                            <div class="tree-branch">
+                                <div class="tree-node">
+                                    <div class="user-node">User3</div>
+                                </div>
+                                <div class="tree-node">
+                                    <div class="user-node">User4</div>
+                                </div>
+                                <div class="tree-node">
+                                    <div class="user-node">User5</div>
+                                </div>
+                                <div class="tree-node">
+                                    <div class="user-node">User6</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Commission Page -->
+        <div id="commission" class="page">
+            <h1>Commissions & Earnings</h1>
+            <p class="subtitle">Track your referral earnings</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Earnings Summary</h2>
+                </div>
+                <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="stat-card">
+                        <div class="stat-value">₹<span id="direct-earnings">25.00</span></div>
+                        <div class="stat-label">Direct Commissions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">₹<span id="indirect-earnings">62.50</span></div>
+                        <div class="stat-label">Indirect Commissions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">₹<span id="total-commissions">87.50</span></div>
+                        <div class="stat-label">Total Commissions</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Commission History</h2>
+                </div>
+                <div class="tabs">
+                    <div class="tab active" data-tab="all">All</div>
+                    <div class="tab" data-tab="direct">Direct</div>
+                    <div class="tab" data-tab="indirect">Indirect</div>
+                </div>
+                
+                <div class="tab-content active" id="tab-all">
+                    <ul class="commission-list">
+                        <li class="commission-item">
+                            <div>
+                                <div>Direct referral - User7</div>
+                                <div class="text-muted">Today, 10:30 AM</div>
+                            </div>
+                            <div class="commission-amount">+₹1.00</div>
+                        </li>
+                        <li class="commission-item">
+                            <div>
+                                <div>Level 2 - User15</div>
+                                <div class="text-muted">Yesterday, 3:45 PM</div>
+                            </div>
+                            <div class="commission-amount">+₹0.50</div>
+                        </li>
+                        <li class="commission-item">
+                            <div>
+                                <div>Direct referral - User5</div>
+                                <div class="text-muted">2 days ago</div>
+                            </div>
+                            <div class="commission-amount">+₹1.00</div>
+                        </li>
+                        <li class="commission-item">
+                            <div>
+                                <div>Level 3 - User22</div>
+                                <div class="text-muted">5 days ago</div>
+                            </div>
+                            <div class="commission-amount">+₹0.25</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content" id="tab-direct">
+                    <ul class="commission-list">
+                        <li class="commission-item">
+                            <div>
+                                <div>Direct referral - User7</div>
+                                <div class="text-muted">Today, 10:30 AM</div>
+                            </div>
+                            <div class="commission-amount">+₹1.00</div>
+                        </li>
+                        <li class="commission-item">
+                            <div>
+                                <div>Direct referral - User5</div>
+                                <div class="text-muted">2 days ago</div>
+                            </div>
+                            <div class="commission-amount">+₹1.00</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content" id="tab-indirect">
+                    <ul class="commission-list">
+                        <li class="commission-item">
+                            <div>
+                                <div>Level 2 - User15</div>
+                                <div class="text-muted">Yesterday, 3:45 PM</div>
+                            </div>
+                            <div class="commission-amount">+₹0.50</div>
+                        </li>
+                        <li class="commission-item">
+                            <div>
+                                <div>Level 3 - User22</div>
+                                <div class="text-muted">5 days ago</div>
+                            </div>
+                            <div class="commission-amount">+₹0.25</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Recharge & Refer</h3>
+                    <p>Earn commissions through our binary referral system when your network recharges their mobile.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" data-page="dashboard">Dashboard</a></li>
+                        <li><a href="#" data-page="recharge">Recharge</a></li>
+                        <li><a href="#" data-page="network">My Network</a></li>
+                        <li><a href="#" data-page="commission">Commissions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@rechargerefer.com</li>
+                        <li>Phone: +91 1800-123-4567</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Recharge & Refer. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+<script>
+        // Page Navigation
+        document.querySelectorAll('.nav-link, .btn[data-page]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                showPage(pageId);
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                if (this.classList.contains('nav-link')) {
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+        }
+        
+        // Tab Navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Update active tab
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show corresponding content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+            });
+        });
+        
+        // Copy Referral Code
+        document.getElementById('copy-ref-code').addEventListener('click', function() {
+            const refCode = document.getElementById('referral-code');
+            refCode.select();
+            document.execCommand('copy');
+            
+            // Show confirmation (you could use a toast notification here)
+            alert('Referral code copied to clipboard!');
+        });
+        
+        // Recharge Form Submission
+        document.getElementById('recharge-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const mobile = document.getElementById('mobile-number').value;
+            const operator = document.getElementById('operator').value;
+            const circle = document.getElementById('circle').value;
+            
+            // Simulate payment processing
+            if (confirm(`Confirm recharge of ₹5 for ${mobile} (${operator} - ${circle})?`)) {
+                // In a real app, you would process payment here
+                alert('Recharge successful! ₹5 has been deducted from your wallet.');
+                
+                // Reset form
+                this.reset();
+                
+                // Update wallet balance (simulation)
+                const currentBalance = parseFloat(document.getElementById('wallet-balance').textContent);
+                document.getElementById('wallet-balance').textContent = (currentBalance - 5).toFixed(2);
+            }
+        });
+        
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logged out successfully!');
+                // In a real app, you would redirect to login page
+            }
+        });
+        
+        // Initialize with dashboard
+        showPage('dashboard');
+    </script>
+</body>
+</html>
